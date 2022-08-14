@@ -1,6 +1,10 @@
 # asvg
 
-Dependency on [lunasvg](https://github.com/sammycage/lunasvg)
+Animated SVG
+
+#### Dependencies
+
+[lunasvg](https://github.com/sammycage/lunasvg)
 
 ### Premiere Pro importers
 
