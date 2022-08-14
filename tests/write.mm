@@ -2,7 +2,8 @@
 #import "MultiTrackQTMovie.h"
 
 int main(int argc, char *argv[]) {
-	@autoreleasepool {
+	@autoreleasepool {		
+		const bool isBase64 = true;
 		const int W = 1920;
 		const int H = 1440; 
 		std::vector<MultiTrackQTMovie::TrackInfo> info;
@@ -21,7 +22,16 @@ int main(int argc, char *argv[]) {
 				(int)(random()%H)
 			]];
 			[svg appendString:@"</g></svg>"];
-			NSData *data = [svg dataUsingEncoding:NSUTF8StringEncoding];
+			
+			NSData *data;
+			if(isBase64) {
+				NSString *str = [NSString stringWithFormat:@"data:image/svg+xml;base64,%@",[[svg dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0]];
+				data = [str dataUsingEncoding:NSUTF8StringEncoding];
+			}
+			else {
+				data = [svg dataUsingEncoding:NSUTF8StringEncoding];
+			}
+
 			recorder->add((unsigned char *)[data bytes],(unsigned int)[data length],0,false);
 		}
 		recorder->save();
