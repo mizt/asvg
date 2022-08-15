@@ -4,7 +4,8 @@ Animated SVG
 
 #### Dependencies
 
-[lunasvg](https://github.com/sammycage/lunasvg)
+[lunasvg](https://github.com/sammycage/lunasvg)  
+[MultiTrackQTMovieg](https://github.com/mizt/MultiTrackQTMovieg)
 
 ### Premiere Pro importers
 
