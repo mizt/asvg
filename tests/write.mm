@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
 			NSMutableString *svg = [NSMutableString stringWithCapacity:0];
 			[svg appendString:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>"];
 			[svg appendString:setting];
-			[svg appendString:@"<g id=\"lines\" fill=\"none\" stroke=\"#FFF\">"];
+			[svg appendString:@"<g id=\"lines\" fill=\"none\" stroke=\"#FFF\" stroke-width=\"8\" stroke-linecap=\"round\">"];
 			[svg appendString:[NSString stringWithFormat:@"<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\"/>",
 				(int)(random()%W),
 				(int)(random()%H),
@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
 			if(isBase64) {
 				NSString *str = [NSString stringWithFormat:@"data:image/svg+xml;base64,%@",[[svg dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0]];
 				data = [str dataUsingEncoding:NSUTF8StringEncoding];
+				//NSLog(@"%@",str);
 			}
 			else {
 				data = [svg dataUsingEncoding:NSUTF8StringEncoding];
