@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>asvg</title>
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+          margin:0;
+          padding:0;
+          background:#808080;
+          overflow:hidden;
+          -webkit-user-select:none;
+      }
+    </style>
+    <script src="./libs.js"></script>
+  </head>
+  <body>
+    <div style="display:flex; width:100vw; height:100vh">
+      <img id="svg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=" />
+    </div>
+    <script>
+      
+      fetch("./test.asvg").then((response)=>{
+        if(response.ok) {
+          return response.arrayBuffer();
+        }
+        else {
+          throw new Error(response.status);
+        }
+      }).then((arrayBuffer)=>{
+        
+        const bytes = new Uint8Array(arrayBuffer);
+        const src = Module._malloc(bytes.byteLength);
+        const asvg = new Uint8Array(Module.HEAPU8.buffer,src,bytes.byteLength);
+        asvg.set(bytes);
+        
+        Module.cwrap("setup","",[])(asvg.byteOffset,asvg.byteLength);
+        
+        const width = Module.cwrap("width","number",[])();
+        const height = Module.cwrap("height","number",[])();
+        const length = Module.cwrap("length","number",[])();
+        
+        if(width>0&&height>0) {
+          
+          const img = document.getElementById("svg");
+          const resize = (e)=>{
+            Object.assign(img.style,(window.innerWidth/width<window.innerHeight/height)?{"width":"100vw","height":"auto","margin":"auto 0"}:
+              {"width":"auto","height":"100vh","margin":"0 auto"});
+          }
+          let tid = 0;
+          window.addEventListener("resize",(e)=>{
+            clearTimeout(tid);
+            tid = setTimeout(()=>resize(),33);
+          });
+          resize();
+          
+          const update = Module.cwrap("update","",[]);
+          if(update) {
+            setInterval(()=>{
+              Module.cwrap("update","",[])();
+            },33);
+            update();
+          }
+        }
+        
+      }).catch((e)=>{
+        console.log(e);
+      });
+      
+      
+      
+      
+      
+    </script>
+  </body>
+</html>
+
+
